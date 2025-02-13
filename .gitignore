@@ -1,0 +1,46 @@
+# ==============================
+# Ignore Node.js and React/Vite files (videoSync_Frontend)
+# ==============================
+/videoSync_Frontend/node_modules/
+/videoSync_Frontend/.env
+/videoSync_Frontend/dist/
+/videoSync_Frontend/.DS_Store
+/videoSync_Frontend/npm-debug.log
+/videoSync_Frontend/yarn-error.log
+
+# ==============================
+# Ignore Spring Boot files (videoSync_Backend)
+# ==============================
+/videoSync_Backend/target/
+/videoSync_Backend/.mvn/
+/videoSync_Backend/.classpath
+/videoSync_Backend/.project
+/videoSync_Backend/.settings/
+/videoSync_Backend/.factorypath
+/videoSync_Backend/build/
+/videoSync_Backend/out/
+/videoSync_Backend/*.iml
+/videoSync_Backend/application.properties
+/videoSync_Backend/application.yml
+/videoSync_Backend/.env
+/videoSync_Backend/.DS_Store
+
+# ==============================
+# General OS and IDE files
+# ==============================
+.DS_Store
+Thumbs.db
+*.log
+*.tmp
+*.swp
+*.bak
+.idea/
+.vscode/
+*.class
+*.jar
+*.war
+*.ear
+*.zip
+*.tar.gz
+*.rar
+*.properties
