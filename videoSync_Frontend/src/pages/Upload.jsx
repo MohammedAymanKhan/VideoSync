@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { CalendarIcon } from "@heroicons/react/24/outline";
+import usePost from "../components/usePost";
+import responseDisplay from "../components/responseDisplay";
 
 function getLocalDateTime() {
   const date = new Date();
@@ -8,13 +10,15 @@ function getLocalDateTime() {
   return date.toISOString().slice(0, 16);
 }
 
-const Upload = () => {
+function Upload(){
+
   const [selectedFile, setSelectedFile] = useState(null);
   const [formData, setFormData] = useState({
     title: '',
     startTime: getLocalDateTime(),
     isPublic: true,
   });
+  const [response, setResponse, postVideo] = usePost('/videos/upload');
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -41,11 +45,27 @@ const Upload = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('Form data:', { ...formData, video: selectedFile });
+    const formPayload = {
+      ...formData,
+      "videoFile": selectedFile
+    }
+    postVideo(formPayload);
+    setSelectedFile(null);
+    setFormData({
+      title: '',
+      startTime: getLocalDateTime(),
+      isPublic: true,
+    });
   };
 
+
+ 
   return (
-    <div className="max-w-2xl mx-auto p-6 animate-fadeIn">
+    <>
+    <div className="relative max-w-2xl mx-auto p-6 animate-fadeIn">
+
+      {response != null && responseDisplay(response.status,['Video uploaded successfully','Upload failed. Please try again'],setResponse)}
+
       <h2 className="text-2xl font-semibold mb-6 text-white">Upload Video</h2>
 
       <form onSubmit={handleSubmit} className="space-y-6">
@@ -137,7 +157,7 @@ const Upload = () => {
         </button>
       </form>
     </div>
-  );
+  </>);
 };
 
 export default Upload;

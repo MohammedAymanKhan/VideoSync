@@ -1,8 +1,7 @@
 package com.videosync.video_sync_app.database.entity;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -11,8 +10,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-@NoArgsConstructor
-@AllArgsConstructor
 @Entity
 @Table(name = "users")
 public class User {
@@ -22,12 +19,15 @@ public class User {
     @Column(name = "id", updatable = false, nullable = false)
     private UUID id;
 
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @OneToMany(mappedBy = "hostUser", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Video> videos = new ArrayList<>();
 
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<VideoParticipant> videoParticipants = new ArrayList<>();
 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     @Column(name = "google_id", nullable = false, unique = true)
     private String googleId;
 
@@ -37,16 +37,22 @@ public class User {
     @Column(name = "email")
     private String email;
 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     @Column(name = "random_color", nullable = false)
     private String randomColor; // e.g., "#AABBCC"
 
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private LocalDateTime createdAt;
 
     @UpdateTimestamp
     @Column(name = "updated_at")
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private LocalDateTime updatedAt;
+
+    public User() {
+    }
 
     public User(UUID id, String googleId, String name, String email, String randomColor) {
         this.id = id;
@@ -54,6 +60,17 @@ public class User {
         this.name = name;
         this.email = email;
         this.randomColor = randomColor;
+    }
+
+    public User(UUID id, String name, String email) {
+        this.id = id;
+        this.name = name;
+        this.email = email;
+    }
+
+    public User(UUID id, String name) {
+        this.id = id;
+        this.name = name;
     }
 
     public User(String googleId, String name, String email, String randomColor) {

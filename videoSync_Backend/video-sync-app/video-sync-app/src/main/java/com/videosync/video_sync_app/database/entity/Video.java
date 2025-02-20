@@ -1,10 +1,10 @@
 package com.videosync.video_sync_app.database.entity;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
@@ -13,10 +13,10 @@ import java.util.List;
 import java.util.UUID;
 
 
-@NoArgsConstructor
 @AllArgsConstructor
 @Entity
 @Table(name = "videos")
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class Video {
 
     @Id
@@ -28,6 +28,7 @@ public class Video {
     private List<VideoParticipant> videoParticipants = new ArrayList<>();
 
     @OneToMany(mappedBy = "video", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private List<Chat> chats = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -38,8 +39,15 @@ public class Video {
     private String title;
 
     @Lob
-    @Column(name = "video_data", nullable = false)
+    @Column(name = "video_data", nullable = false, columnDefinition = "LONGBLOB")
+    @Basic(fetch = FetchType.LAZY)
     private byte[] videoData;
+
+    @Lob
+    @Column(name = "thumbnail_data", nullable = false, columnDefinition = "LONGBLOB")
+    @Basic(fetch = FetchType.LAZY)
+    private byte[] thumbnailData;
+
 
     @Column(name = "start_time")
     private LocalDateTime startTime;
@@ -53,6 +61,18 @@ public class Video {
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
+
+    public Video() {
+    }
+
+    public Video(UUID id, String title, LocalDateTime startTime, String inviteKey, boolean isPublic, LocalDateTime createdAt) {
+        this.id = id;
+        this.title = title;
+        this.startTime = startTime;
+        this.inviteKey = inviteKey;
+        this.isPublic = isPublic;
+        this.createdAt = createdAt;
+    }
 
     public UUID getId() {
         return id;
@@ -132,6 +152,14 @@ public class Video {
 
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public byte[] getThumbnailData() {
+        return thumbnailData;
+    }
+
+    public void setThumbnailData(byte[] thumbnailData) {
+        this.thumbnailData = thumbnailData;
     }
 }
 

@@ -3,19 +3,11 @@ package com.videosync.video_sync_app.database.entity;
 import com.videosync.video_sync_app.database.entity.enums.ParticipantStatus;
 import com.videosync.video_sync_app.database.entity.enums.ParticipantType;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
 @Entity
 @Table(name = "video_participants", uniqueConstraints = @UniqueConstraint(columnNames = {"video_id", "user_id"}))
 public class VideoParticipant {
@@ -51,6 +43,91 @@ public class VideoParticipant {
     @Column(name = "responded_at")
     private LocalDateTime respondedAt;
 
+    public VideoParticipant() {
+    }
+
+    public VideoParticipant(UUID id, Video video, User user, ParticipantType type,
+                            ParticipantStatus status, boolean canControlVideo, LocalDateTime createdAt, LocalDateTime respondedAt) {
+        this.id = id;
+        this.video = video;
+        this.user = user;
+        this.type = type;
+        this.status = status;
+        this.canControlVideo = canControlVideo;
+        this.createdAt = createdAt;
+        this.respondedAt = respondedAt;
+    }
+
+    public VideoParticipant(Video video, User user, ParticipantType type, LocalDateTime createdAt) {
+        this.video = video;
+        this.user = user;
+        this.type = type;
+        this.createdAt = createdAt;
+    }
+
+    public UUID getId() {
+        return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
+    }
+
+    public Video getVideo() {
+        return video;
+    }
+
+    public void setVideo(Video video) {
+        this.video = video;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public ParticipantType getType() {
+        return type;
+    }
+
+    public void setType(ParticipantType type) {
+        this.type = type;
+    }
+
+    public ParticipantStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(ParticipantStatus status) {
+        this.status = status;
+    }
+
+    public boolean isCanControlVideo() {
+        return canControlVideo;
+    }
+
+    public void setCanControlVideo(boolean canControlVideo) {
+        this.canControlVideo = canControlVideo;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public LocalDateTime getRespondedAt() {
+        return respondedAt;
+    }
+
+    public void setRespondedAt(LocalDateTime respondedAt) {
+        this.respondedAt = respondedAt;
+    }
 }
 
 

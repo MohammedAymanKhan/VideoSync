@@ -1,4 +1,4 @@
-package com.videosync.video_sync_app.Security.JwtToken;
+package com.videosync.video_sync_app.security.JwtToken;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtParser;
@@ -30,7 +30,7 @@ public class JwtTokenUtility {
                 .claim("googleId", user.getGoogleId())
                 .setHeaderParam("typ", "JWT")
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 1000))
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60))
                 .signWith(SECRET_KEY, SignatureAlgorithm.HS512)
                 .compact();
     }
@@ -50,7 +50,8 @@ public class JwtTokenUtility {
 
     public User getUser(String jwtToken){
         Claims claims = extractClaims(jwtToken);
-        return new User(UUID.fromString(claims.getSubject()),
+        return new User(
+                UUID.fromString(claims.getSubject()),
                 claims.get("googleId",String.class),
                 claims.get("name",String.class),
                 claims.get("email",String.class),

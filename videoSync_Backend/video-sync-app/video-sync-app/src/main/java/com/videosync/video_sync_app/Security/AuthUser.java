@@ -1,4 +1,4 @@
-package com.videosync.video_sync_app.Security;
+package com.videosync.video_sync_app.security;
 
 import com.videosync.video_sync_app.database.entity.User;
 import org.springframework.security.core.Authentication;
@@ -13,6 +13,11 @@ public class AuthUser implements Authentication {
 
     public AuthUser(User user){
         this.user = user;
+    }
+
+    public AuthUser(){
+        this.user = null;
+        this.isAuth = false;
     }
 
     @Override

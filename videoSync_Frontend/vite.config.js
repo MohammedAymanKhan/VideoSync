@@ -12,4 +12,7 @@ export default defineConfig({
   server: {
     port: 5713, // change this to your desired port
   },
+  define: {
+    global: {},
+  },
 })

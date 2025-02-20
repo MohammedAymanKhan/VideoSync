@@ -1,6 +1,6 @@
-package com.videosync.video_sync_app.Security.JwtToken;
+package com.videosync.video_sync_app.security.JwtToken;
 
-import com.videosync.video_sync_app.Security.AuthUser;
+import com.videosync.video_sync_app.security.AuthUser;
 import com.videosync.video_sync_app.database.entity.User;
 import com.videosync.video_sync_app.database.repository.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
@@ -35,15 +35,18 @@ public class JwtHeaderSecurityContextRepository implements SecurityContextReposi
 
     private SecurityContext readSecurityContextFromHeader(HttpServletRequest request){
         String authorizationHeader = request.getHeader("authorization");
-        String username = null;
+
         String jwt = null;
 
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
             jwt = authorizationHeader.substring(7);
-            username = jwtTokenUtility.extractUsername(jwt);
         }
 
-        if (username != null) {
+        if(jwt == null){
+            jwt = request.getParameter("token");
+        }
+
+        if (jwt != null) {
             if (jwtTokenUtility.validateToken(jwt)) {
                 User user = jwtTokenUtility.getUser(jwt);
                 Authentication authentication = new AuthUser(user);
@@ -69,7 +72,6 @@ public class JwtHeaderSecurityContextRepository implements SecurityContextReposi
     @Override
     public SecurityContext loadContext(HttpRequestResponseHolder requestResponseHolder) {
         HttpServletRequest request = requestResponseHolder.getRequest();
-
         SecurityContext context = this.readSecurityContextFromHeader(request);
         if (context == null) {
             context = this.generateNewContext();
@@ -97,7 +99,6 @@ public class JwtHeaderSecurityContextRepository implements SecurityContextReposi
             }
 
             String jwtToken = jwtTokenUtility.generateToken(user);
-
             response.addHeader("authorization", "Bearer " + jwtToken);
             try {
                 response.sendRedirect("http://localhost:5713/login/oauth2/token/google?token="+jwtToken);

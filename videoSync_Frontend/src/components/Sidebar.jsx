@@ -1,4 +1,6 @@
 import { Link } from "react-router-dom";
+import useFetch from '../components/useFetch';
+import { useEffect } from "react";
 import {
   HomeIcon,
   FolderOpenIcon,
@@ -6,6 +8,8 @@ import {
   CalendarIcon,
   UserIcon,
 } from "@heroicons/react/24/outline";
+import { getContext } from "./AuthContext";
+
 
 const Sidebar = () => {
   const menuItems = [
@@ -14,14 +18,15 @@ const Sidebar = () => {
     { icon: CalendarIcon, label: "Upcoming", path: "/upcoming" },
     { icon: ArrowUpTrayIcon, label: "Upload", path: "/upload" },
   ];
-
-  const dummyUser = {
-    name: "Ayman",
-    avatar: "/placeholder.svg",
-  };
+  const userContent = getContext();
+  const [user, setUser, fetchUser] = useFetch("/user/myDetails");
+  useEffect(()=>{
+    fetchUser(userContent);
+  },[]);
+  console.log(userContent);
 
   return (
-    <aside className="w-48 h-screen bg-gray-900 fixed left-0 top-0 z-30 border-r border-gray-700">
+    <aside className="col-start-1 col-end-2 row-start-1 row-end-3 bg-gray-900 border-r border-gray-700">
       <div className="flex flex-col h-full">
         
         <nav className="px-3 py-4 space-y-1 h-1/1 flex-col content-center">
@@ -42,7 +47,7 @@ const Sidebar = () => {
               <UserIcon className="w-5 h-5 text-gray-400" />
             </div>
             <span className="text-sm font-medium text-gray-300">
-              {dummyUser.name}
+              {user?.name}
             </span>
           </div>
         </div>

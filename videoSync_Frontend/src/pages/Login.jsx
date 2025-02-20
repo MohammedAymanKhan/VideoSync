@@ -1,22 +1,26 @@
 import { ArrowRightStartOnRectangleIcon } from "@heroicons/react/24/outline";
-import { useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 
 const GoogleOauth2Code = 'http://localhost:8080/oauth2/authorization/google';
 
-const Login = () => {
+function Login(){
+
   const navgate = useNavigate();
 
-  const handleGoogleLogin = () => {
+  function handleGoogleLogin(){
+    
     function handleMessage(event) {
       if (event.origin !== "http://localhost:5713") return; 
-      if(event.data.token) navgate('/');
-      else navgate('/login');
+      
+      if(event.data.token){
+        navgate('/');
+      }   
+      else{
+        navgate('/login');
+      }  
 
       window.removeEventListener("message", handleMessage);
     }
-
-    window.addEventListener("message", handleMessage);
 
     const width = 500;
     const height = 600;
@@ -29,6 +33,7 @@ const Login = () => {
       `width=${width},height=${height},top=${top},left=${left}`
     );
 
+    window.addEventListener("message", handleMessage);
   };
 
 
